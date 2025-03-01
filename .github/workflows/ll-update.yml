@@ -40,6 +40,6 @@ jobs:
           role-session-name: GitHub-OIDC-LLUpload
 
       - name: Upload to littlelink
-        run: aws_sync_artifacts_folder
+        run: aws_sync_ll_folder
         env:
           BUCKET_NAME: "${{ secrets.AWS_BUCKET }}"
