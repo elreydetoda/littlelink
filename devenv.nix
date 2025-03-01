@@ -10,7 +10,6 @@
     curl
     awscli2
     jq
-    nodePackages.aws-cdk
   ];
 
   # https://devenv.sh/languages/
@@ -19,6 +18,14 @@
     python = {
       enable = true;
       uv = {
+        enable = true;
+      };
+    };
+    # for CDK deployments
+    javascript = {
+      enable = true;
+      package = pkgs.nodejs_20;
+      npm = {
         enable = true;
       };
     };
@@ -32,7 +39,6 @@
 
   # https://devenv.sh/scripts/
   scripts = {
-    # ${config.languages.python.uv.package}/bin/uv run "$@"
     # aws_profile_prep = {
     #   exec = ''
     #     set -euxo pipefail
@@ -68,6 +74,18 @@
       exec = ''
         set -euxo pipefail
         aws s3 sync $ARTIFACTS_FOLDER s3://$BUCKET_NAME/ll/
+      '';
+    };
+    cdk_prep = {
+      exec = ''
+        set -euxo pipefail
+        npm install aws-cdk@^2
+      '';
+    };
+    cdk_wrap = {
+      exec = ''
+        set -euxo pipefail
+        ${config.languages.python.uv.package}/bin/uv run npx cdk "$@"
       '';
     };
   };
