@@ -73,13 +73,14 @@
     aws_sync_ll_folder = {
       exec = ''
         set -euxo pipefail
-        aws s3 sync $ARTIFACTS_FOLDER s3://$BUCKET_NAME/ll/
+        aws s3 cp index.html s3://$BUCKET_NAME/links
+        aws s3 sync ./ll/ s3://$BUCKET_NAME/ll/
       '';
     };
     cdk_prep = {
       exec = ''
         set -euxo pipefail
-        npm install aws-cdk@^2
+        npm install || npm install aws-cdk@^2
       '';
     };
     cdk_wrap = {

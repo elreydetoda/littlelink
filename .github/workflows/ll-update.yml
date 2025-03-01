@@ -1,0 +1,45 @@
+name: Deploy LittleLink
+
+# Build on push to the main branch
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write # This is required for aws oidc connection
+  contents: read # This is required for actions/checkout
+
+defaults:
+  run:
+    shell: devenv shell bash -- -xe {0}
+jobs:
+  ll-upload:
+    name: LittleLink Upload
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      # https://devenv.sh/integrations/github-actions/#prerequisites
+      - uses: cachix/install-nix-action@v30
+      - uses: cachix/cachix-action@v14
+        with:
+          name: devenv
+      - name: Install devenv.sh
+        run: nix profile install nixpkgs#devenv
+        shell: bash
+
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.OIDC_AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: GitHub-OIDC-LLUpload
+
+      - name: Upload to littlelink
+        run: aws_sync_artifacts_folder
+        env:
+          BUCKET_NAME: "${{ secrets.AWS_BUCKET }}"
