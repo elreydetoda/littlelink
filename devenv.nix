@@ -73,8 +73,8 @@
     aws_sync_ll_folder = {
       exec = ''
         set -euxo pipefail
-        aws s3 cp index.html s3://$BUCKET_NAME/links
-        aws s3 sync ./ll/ s3://$BUCKET_NAME/ll/
+        aws s3 cp --acl public-read index.html s3://$BUCKET_NAME/links
+        aws s3 sync --acl public-read ./ll/ s3://$BUCKET_NAME/ll/
       '';
     };
     cdk_prep = {
