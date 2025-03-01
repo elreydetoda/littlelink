@@ -1,3 +1,10 @@
+## My Customizations
+
+- moved to sub-folder of `ll` to easily contain files on s3 bucket
+- added my own avatar (original/normal) and then half'ed the size of it ([src](https://opensourceforgeeks.blogspot.com/2018/02/resizing-videos-and-images-using-ffmpeg.html) ([wbm](https://web.archive.org/web/20250117222954/https://opensourceforgeeks.blogspot.com/2018/02/resizing-videos-and-images-using-ffmpeg.html)))
+
+---
+
 ![Logo](https://cdn.cottle.cloud/GitHub/LittleLink/littlelink.gif)
 
 # LittleLink
